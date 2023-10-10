@@ -1,4 +1,6 @@
-FROM alpine:3.18
+ARG BUILD_FROM=alpine:3.16
+
+FROM BUILD_FROM
 
 ENV TZ="Europe/Paris"
 
