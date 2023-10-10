@@ -1,6 +1,6 @@
 ARG BUILD_FROM=alpine:3.16
 
-FROM BUILD_FROM
+FROM $BUILD_FROM
 
 ENV TZ="Europe/Paris"
 
