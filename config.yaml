@@ -1,0 +1,25 @@
+name: emontx_sniffer
+description:  read emontx 'jeelib' datas and send to emoncms
+version: alpine3.18
+image: alexjunk/emontx_sniffer
+slug: emontx_sniffer
+url: https://github.com/Open-Building-Management/emontx_sniffer/discussions
+init: true
+devices:
+  - /dev/ttyAMA0
+arch:
+  - armv7
+  - aarch64
+  - amd64
+options:
+  MQTT_HOST: 192.168.1.36
+  MQTT_USER: emonpi
+  MQTT_PASSWORD: emonpimqtt2016
+  MQTT_PORT: 9883
+  VERBOSITY: false
+schema:
+  MQTT_HOST: str
+  MQTT_USER: str
+  MQTT_PASSWORD: str
+  MQTT_PORT: int
+  VERBOSITY: bool
