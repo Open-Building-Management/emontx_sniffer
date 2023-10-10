@@ -15,9 +15,7 @@ On a classic raspbian OS, it is easy as `/boot` is mounted if you read your SD c
 
 If running an factory [SD card](https://www.home-assistant.io/installation/raspberrypi#writing-the-image-with-balena-etcher) using [buildroot](https://buildroot.org/), things are a bit different.
 
-It will require to establish an SSH access to the host through port 22222 !
-
-Click [here](https://developers.home-assistant.io/docs/operating-system/debugging/) to see how to achieve this
+It will require to establish an SSH access to the host through port 22222, as explained [here](https://developers.home-assistant.io/docs/operating-system/debugging/)
 
 Once connected with `ssh root@homeassistant.local -p 22222`, edit `/mnt/boot/config.txt`
 
