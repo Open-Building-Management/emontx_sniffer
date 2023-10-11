@@ -60,8 +60,10 @@ def read(buf):
     the string should start by "OK", then the node ID
     after it stores all the values as int16 in little endian
     """
-    datas = buf.decode().split(" ")
     if buf:
+        if "\r\n" not in buf.decode():
+            print("no end of line received - incomplete packet")
+        datas = buf.decode().replace("\r\n", "").strip().split(" ")
         if VERBOSITY:
             print("******************************")
             print(buf)
