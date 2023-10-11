@@ -111,4 +111,5 @@ def loop():
             print(f'error {e}')
         time.sleep(0.1)
 
-loop()
+if __name__ == "__main__":
+    loop()
