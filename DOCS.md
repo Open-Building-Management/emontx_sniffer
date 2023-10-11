@@ -41,3 +41,15 @@ To correct, press `210g` + `return` to change the group to `210`
 
 You can quit minicom with `CTRL-A` + `Q`, exit the container and restart the addon
 
+# testing MQTT
+
+If there is no incoming data in emoncms, you should check the add-on configuration, so that the credentials fit to the emoncms add-on configuration. 
+
+If you want to test the mqtt connectivity in command line : 
+
+```
+docker run --rm --device=/dev/ttyAMA0 -e MQTT_USER=emonpi -e MQTT_PASSWORD=emonpimqtt2016 -e MQTT_HOST=127.0.0.1 -e MQTT_PORT=9883 -it alexjunk/emontx_sniffer:alpine3.18 sh
+```
+Don't forget to fit the credentials to the values you are using !
+
+Then `python3 mqtt_test.py`
