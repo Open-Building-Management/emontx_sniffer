@@ -29,7 +29,7 @@ def setting(name, default_value):
 MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", "127.0.0.1").replace("\"", "")
-MQTT_PORT = int(setting("MQTT_PORT", "1883"))
+MQTT_PORT = int(setting("MQTT_PORT", "9883"))
 VERBOSITY = int(setting("VERBOSITY", True))
 
 def publish_to_mqtt(node, payload):
