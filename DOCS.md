@@ -2,7 +2,7 @@ This tool reads radio data coming from emontx and send them to the emoncms
 
 # usage with a radio receiver attached to the GPIO
 
-![emonbase](images/emonbase.png)
+![emonbase](https://github.com/Open-Building-Management/emontx_sniffer/raw/main/images/emonbase.png)
 
 Such a device, like emonpi or RFM69Pi is usually recognized as `/dev/ttyAMA0`, the same port used by bluetooth on a raspberry
 
