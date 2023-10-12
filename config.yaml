@@ -14,10 +14,10 @@ arch:
 options:
   MQTT_USER: emonpi
   MQTT_PASSWORD: emonpimqtt2016
-  MQTT_PORT: 9883
   VERBOSITY: false
 schema:
   MQTT_USER: str
   MQTT_PASSWORD: str
-  MQTT_PORT: int
+  MQTT_HOST: str?
+  MQTT_PORT: int?
   VERBOSITY: bool
