@@ -12,13 +12,11 @@ arch:
   - aarch64
   - amd64
 options:
-  MQTT_HOST: 192.168.1.36
   MQTT_USER: emonpi
   MQTT_PASSWORD: emonpimqtt2016
   MQTT_PORT: 9883
   VERBOSITY: false
 schema:
-  MQTT_HOST: str
   MQTT_USER: str
   MQTT_PASSWORD: str
   MQTT_PORT: int
