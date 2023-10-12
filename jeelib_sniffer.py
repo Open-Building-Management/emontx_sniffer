@@ -4,10 +4,12 @@ incoming datas are binary strings
 import time
 import json
 import os
+import hashlib
 import signal
 import serial
 import paho.mqtt.client as mqtt
 
+TARGET_ADDON_GIT_REPO = "https://github.com/Open-Building-Management/emoncms"
 PORT = "/dev/ttyAMA0"
 BAUDRATE = 38400
 OPTIONS_FILE = "data/options.json"
@@ -26,9 +28,14 @@ def setting(name, default_value):
         default=OPTIONS.get(name, default_value)
     )
 
+def get_hash_from_repository(name):
+    """Generate a hash from repository."""
+    key = name.lower().encode()
+    return hashlib.sha1(key).hexdigest()[:8]
+
 MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
-MQTT_HOST = setting("MQTT_HOST", "127.0.0.1").replace("\"", "")
+MQTT_HOST = f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms'
 MQTT_PORT = int(setting("MQTT_PORT", "9883"))
 VERBOSITY = int(setting("VERBOSITY", True))
 
