@@ -36,7 +36,7 @@ def get_hash_from_repository(name):
 MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms'
-MQTT_PORT = int(setting("MQTT_PORT", "9883"))
+MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 VERBOSITY = int(setting("VERBOSITY", True))
 
 def publish_to_mqtt(node, payload):
