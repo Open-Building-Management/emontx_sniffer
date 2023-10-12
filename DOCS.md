@@ -45,11 +45,16 @@ You can quit minicom with `CTRL-A` + `Q`, exit the container and restart the add
 
 If there is no incoming data in emoncms, you should check the add-on configuration, so that the credentials fit to the emoncms add-on configuration. 
 
-If you want to test the mqtt connectivity in command line : 
+It is possible to test the mqtt connectivity in command line.
 
+Start by listing all running containers with `docker container ls` and identify the emontx_sniffer among them :
 ```
-docker run --rm --device=/dev/ttyAMA0 -e MQTT_USER=emonpi -e MQTT_PASSWORD=emonpimqtt2016 -e MQTT_HOST=127.0.0.1 -e MQTT_PORT=9883 -it alexjunk/emontx_sniffer:alpine3.18 sh
+CONTAINER ID   IMAGE                                                         COMMAND                  CREATED        STATUS                  PORTS                                                                              NAMES
+12345546d715   alexjunk/emontx_sniffer:alpine3.18                            "python3 jeelib_snif…"   15 hours ago   Up 15 hours                                                                                                addon_3bec39e5_emontx_sniffer
+292137d2a0d9   homeassistant/armv7-addon-configurator:5.6.0                  "/init"                  15 hours ago   Up 15 hours (healthy)                                                                                      addon_core_configurator
 ```
-Don't forget to fit the credentials to the values you are using !
-
-Then `python3 mqtt_test.py`
+Open a shell session to the running container with `docker exec -it 12345546d715 sh` and run the `mqtt_test.py` script
+```
+# python3 mqtt_test.py 
+{'success': True, 'text': 'Connected to MQTT and sending to node 3'}
+```
