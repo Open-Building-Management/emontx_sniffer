@@ -4,7 +4,7 @@ This tool reads radio data coming from emontx and send them to the emoncms
 
 ![emonbase](https://github.com/Open-Building-Management/emontx_sniffer/raw/main/images/emonbase.png)
 
-Such a device, like emonpi or RFM69Pi is usually recognized as `/dev/ttyAMA0`, the same port used by bluetooth on a raspberry
+Devices like [emonPi](https://docs.openenergymonitor.org/emonpi/index.html) or [RFM69Pi](https://docs.openenergymonitor.org/emonbase/rfm69-pi.html) are usually recognized as `/dev/ttyAMA0`, the same port used by bluetooth on a raspberry
 
 Disabling bluetooth requires to modify `/boot/config.txt` and to add the following lines at the end :
 ```
@@ -25,7 +25,7 @@ Not implemented yet
 
 # debugging the serial port
 
-If you are using a RFM69 which you do not remember haviong reconfigured, you can have some troubles like receiving packets like that :
+If you are using a RFM69 which you do not remember having reconfigured, you can have some troubles like receiving packets like that :
 ```
 ? G0 29 79 85 208 241 51 133 87 172 22 78 60 96 83 74 211 194 51 60 114 242 (-98)
 ```
