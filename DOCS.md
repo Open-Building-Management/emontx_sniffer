@@ -23,7 +23,7 @@ Once connected with `ssh root@homeassistant.local -p 22222`, edit `/mnt/boot/con
 
 Not implemented yet
 
-# debugging
+# debugging the serial port
 
 If you are using a RFM69 which you do not remember haviong reconfigured, you can have some troubles like receiving packets like that :
 ```
@@ -45,7 +45,7 @@ You can quit minicom with `CTRL-A` + `Q`, exit the container and restart the add
 
 If there is no incoming data in emoncms, you should check the add-on configuration, so that the credentials fit to the emoncms add-on configuration. 
 
-It is possible to test the mqtt connectivity in command line.
+It is possible to test the mqtt connectivity in command line and it does not require to stop the addon.
 
 Start by listing all running containers with `docker container ls` and identify the emontx_sniffer among them :
 ```
