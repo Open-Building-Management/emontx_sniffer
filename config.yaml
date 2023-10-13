@@ -7,7 +7,7 @@ url: https://github.com/Open-Building-Management/emontx_sniffer/discussions
 init: true
 homeassistant_api: true
 hassio_api: true
-hassio_role: manager
+hassio_role: admin
 devices:
   - /dev/ttyAMA0
 arch:
