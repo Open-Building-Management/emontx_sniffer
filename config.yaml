@@ -6,8 +6,8 @@ slug: emontx_sniffer
 url: https://github.com/Open-Building-Management/emontx_sniffer/discussions
 init: true
 homeassistant_api: true
-hassio_api: true
-hassio_role: admin
+services:
+  - mqtt:want
 devices:
   - /dev/ttyAMA0
 arch:
