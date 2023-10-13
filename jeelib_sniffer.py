@@ -8,7 +8,10 @@ import hashlib
 import signal
 import logging
 import serial
+import requests
 import paho.mqtt.client as mqtt
+
+SUPERVISOR_TOKEN = os.getenv("SUPERVISOR_TOKEN", None)
 
 FORMAT = "%(asctime)s %(levelname)-8s %(message)s"
 logging.basicConfig(format=FORMAT)
@@ -126,4 +129,28 @@ def loop():
         time.sleep(0.1)
 
 if __name__ == "__main__":
+    # extracting time zone from the host machine
+    container_tz = os.getenv("TZ", default="Europe/Paris")
+    try:
+        headers = {}
+        headers["Authorization"] = f'Bearer {SUPERVISOR_TOKEN}'
+        headers["content-type"] = "text/plain"
+        url = "http://supervisor/core/api/config"
+        conf = requests.get(url, headers=headers)
+    except Exception as e:
+        log.error(e)
+    else:
+        if conf.status_code == 200:
+            supervisor_tz = conf.json()["time_zone"]
+    finally:
+        src = f'/usr/share/zoneinfo/{container_tz}'
+        dest = "/etc/localtime"
+        try:
+            if os.path.exists(dest):
+                os.remove(dest)
+            os.link(src, dest)
+        except Exception as e:
+            log.error(e)
+        else:
+            log.info(f'timezone {container_tz} fixed')
     loop()
