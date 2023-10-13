@@ -6,8 +6,13 @@ import json
 import os
 import hashlib
 import signal
+import logging
 import serial
 import paho.mqtt.client as mqtt
+
+FORMAT = "%(asctime)s %(levelname)-8s %(message)s"
+logging.basicConfig(format=FORMAT)
+log = logging.getLogger()
 
 TARGET_ADDON_GIT_REPO = "https://github.com/Open-Building-Management/emoncms"
 PORT = "/dev/ttyAMA0"
@@ -38,6 +43,11 @@ MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms'
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 VERBOSITY = int(setting("VERBOSITY", True))
+if VERBOSITY:
+    log.setLevel("DEBUG")                       
+else:
+    log.setLevel("INFO")
+log.info(f'MQTT_HOST : {MQTT_HOST} - MQTT_PORT : {MQTT_PORT}')
 
 def publish_to_mqtt(node, payload):
     """connect to mqtt broker and send payload"""
@@ -68,12 +78,11 @@ def read(buf):
     after it stores all the values as int16 in little endian
     """
     if buf:
+        log.info("******************************")
+        log.debug(buf)
         if "\r\n" not in buf.decode():
-            print("no end of line received - incomplete packet")
+            log.info("no end of line received - incomplete packet")
         datas = buf.decode().replace("\r\n", "").strip().split(" ")
-        if VERBOSITY:
-            print("******************************")
-            print(buf)
         if datas[0] == "OK" and len(datas)>=2:
             payload = {}
             rssi = datas[-1].strip()
@@ -81,7 +90,7 @@ def read(buf):
                 try:
                     payload["rssi"] = int(rssi[1:-1])
                 except ValueError:
-                    print("rssi is not valid - discarding packet")
+                    log.error("rssi is not valid - discarding packet")
                 else:
                     frame = [int(i) for i in datas[2:-1]]
                     i=0
@@ -92,12 +101,11 @@ def read(buf):
                     for i, value in enumerate(values):
                         payload[i+1] = value
                     message = publish_to_mqtt(datas[1], payload)
-                    if not VERBOSITY:
-                        print("******************************")
-                    print(message["text"])
+                    log.info(message["text"])
 
 def sig_handler(signum, frame):
     """graceful exit the loop"""
+    log.info(f'received {signum} - exiting')
     raise SystemExit
 
 def loop():
@@ -112,10 +120,10 @@ def loop():
                 read(rx_buf)
                 ser.close()
         except serial.SerialException as e:
-            print(f'error {e}')
+            log.error(f'error {e}')
             raise SystemExit
         except Exception as e:
-            print(f'error {e}')
+            log.error(f'error {e}')
         time.sleep(0.1)
 
 if __name__ == "__main__":
