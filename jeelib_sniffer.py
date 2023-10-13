@@ -40,7 +40,7 @@ def get_hash_from_repository(name):
 
 MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
-MQTT_HOST = f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms'
+MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 VERBOSITY = int(setting("VERBOSITY", True))
 if VERBOSITY:
@@ -63,7 +63,6 @@ def publish_to_mqtt(node, payload):
     else:
         text = f'Connected to MQTT and sending to node {node}'
         json_payload = json.dumps(payload)
-
         result = mqttc.publish(f'emon/{node}', json_payload)
         if result[0] != 0 :
             message["success"] = False
@@ -78,7 +77,7 @@ def read(buf):
     after it stores all the values as int16 in little endian
     """
     if buf:
-        log.info("******************************")
+        log.debug("******************************")
         log.debug(buf)
         if "\r\n" not in buf.decode():
             log.info("no end of line received - incomplete packet")
