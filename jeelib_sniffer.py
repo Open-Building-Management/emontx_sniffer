@@ -52,26 +52,33 @@ else:
     log.setLevel("INFO")
 log.info(f'MQTT_HOST : {MQTT_HOST} - MQTT_PORT : {MQTT_PORT}')
 
+def on_connect(client, userdata, flags, rc):
+    """detect the broker response to the connection request"""
+    client.connection = True
+
+mqtt.Client.connection = False
+
 def publish_to_mqtt(node, payload):
     """connect to mqtt broker and send payload"""
     message = {}
     message["success"] = True
+    mqttc = mqtt.Client()
+    mqttc.username_pw_set(MQTT_USER, password=MQTT_PASSWORD)
+    mqttc.on_connect = on_connect
     try:
-        mqttc = mqtt.Client()
-        mqttc.username_pw_set(MQTT_USER, password=MQTT_PASSWORD)
-        mqttc.connect(MQTT_HOST, port=MQTT_PORT, keepalive=60)
+        mqttc.connect(MQTT_HOST, port=MQTT_PORT, keepalive=1)
     except Exception as e:
         message["success"] = False
         message["text"] = f'Could not connect to MQTT {e}'
     else:
-        text = f'Connected to MQTT and sending to node {node}'
-        json_payload = json.dumps(payload)
-        result = mqttc.publish(f'emon/{node}', json_payload)
+        mqttc.loop_start()
+        while not mqttc.connection :
+            time.sleep(0.1)
+        result = mqttc.publish(f'emon/{node}', json.dumps(payload))
         if result[0] != 0 :
             message["success"] = False
-            text = f'{text} Error {result}'
         mqttc.disconnect()
-        message["text"] = text
+        message["text"] = mqtt.connack_string(result[0])
     return message
 
 def read(buf):
