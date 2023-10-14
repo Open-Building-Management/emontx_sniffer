@@ -56,5 +56,5 @@ CONTAINER ID   IMAGE
 Open a shell session to the running container with `docker exec -it 12345546d715 sh` and run the `mqtt_test.py` script
 ```
 # python3 mqtt_test.py 
-{'success': True, 'text': 'Connected to MQTT and sending to node 3'}
+{'success': True, 'text': 'Connection Accepted.'}
 ```
