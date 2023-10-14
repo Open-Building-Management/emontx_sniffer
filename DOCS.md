@@ -49,9 +49,9 @@ It is possible to test the mqtt connectivity in command line and it does not req
 
 Start by listing all running containers with `docker container ls` and identify the emontx_sniffer among them :
 ```
-CONTAINER ID   IMAGE                                                         COMMAND                  CREATED        STATUS                  PORTS                                                                              NAMES
-12345546d715   alexjunk/emontx_sniffer:alpine3.18                            "python3 jeelib_snif…"   15 hours ago   Up 15 hours                                                                                                addon_3bec39e5_emontx_sniffer
-292137d2a0d9   homeassistant/armv7-addon-configurator:5.6.0                  "/init"                  15 hours ago   Up 15 hours (healthy)                                                                                      addon_core_configurator
+CONTAINER ID   IMAGE
+12345546d715   alexjunk/emontx_sniffer:alpine3.18
+292137d2a0d9   homeassistant/armv7-addon-configurator:5.6.0
 ```
 Open a shell session to the running container with `docker exec -it 12345546d715 sh` and run the `mqtt_test.py` script
 ```
