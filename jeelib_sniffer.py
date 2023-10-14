@@ -110,7 +110,8 @@ def read(buf):
                     for i, value in enumerate(values):
                         payload[i+1] = value
                     message = publish_to_mqtt(datas[1], payload)
-                    log.info(message["text"])
+                    if not message["success"]:
+                        log.error(message["text"])
 
 def sig_handler(signum, frame):
     """graceful exit the loop"""
