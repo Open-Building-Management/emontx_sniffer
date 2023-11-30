@@ -12,13 +12,14 @@ import requests
 import paho.mqtt.client as mqtt
 
 SUPERVISOR_TOKEN = os.getenv("SUPERVISOR_TOKEN", None)
+URL = "http://supervisor/core/api/config"
+DEST = "/etc/localtime"
 
 FORMAT = "%(asctime)s %(levelname)-8s %(message)s"
 logging.basicConfig(format=FORMAT)
 log = logging.getLogger()
 
 TARGET_ADDON_GIT_REPO = "https://github.com/Open-Building-Management/emoncms"
-PORT = "/dev/ttyAMA0"
 BAUDRATE = 38400
 OPTIONS_FILE = "data/options.json"
 OPTIONS = {}
@@ -41,18 +42,30 @@ def get_hash_from_repository(name):
     key = name.lower().encode()
     return hashlib.sha1(key).hexdigest()[:8]
 
+PORT = setting("PORT", "/dev/ttyAMA0")
 MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 VERBOSITY = int(setting("VERBOSITY", True))
 if VERBOSITY:
-    log.setLevel("DEBUG")                       
+    log.setLevel("DEBUG")
 else:
     log.setLevel("INFO")
-log.info(f'MQTT_HOST : {MQTT_HOST} - MQTT_PORT : {MQTT_PORT}')
+info_message = f'MQTT_HOST : {MQTT_HOST} - MQTT_PORT : {MQTT_PORT}'
+log.info(info_message)
 
-def on_connect(client, userdata, flags, rc):
+def connect_to_serial(port, baudrate):
+    """open a serial socket"""
+    try:
+        socket = serial.Serial(port, baudrate, timeout=0)
+    except (ValueError, serial.SerialException) as err:
+        error_message = f'error {err}'
+        log.error(error_message)
+        return None
+    return socket
+
+def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument
     """detect the broker response to the connection request"""
     client.connection = True
 
@@ -67,9 +80,9 @@ def publish_to_mqtt(node, payload):
     mqttc.on_connect = on_connect
     try:
         mqttc.connect(MQTT_HOST, port=MQTT_PORT, keepalive=1)
-    except Exception as e:
+    except Exception as connexion_error:
         message["success"] = False
-        message["text"] = f'Could not connect to MQTT {e}'
+        message["text"] = f'Could not connect to MQTT {connexion_error}'
     else:
         mqttc.loop_start()
         while not mqttc.connection :
@@ -113,28 +126,31 @@ def read(buf):
                     if not message["success"]:
                         log.error(message["text"])
 
-def sig_handler(signum, frame):
-    """graceful exit the loop"""
-    log.info(f'received {signum} - exiting')
-    raise SystemExit
+class Sniffer:
+    """base serial port sniffer through RFM69 devices"""
+    def __init__(self):
+        self.socket = connect_to_serial(PORT, BAUDRATE)
 
-def loop():
-    """run the loop using a with to connect to serial
-    timeout has to be set to 1"""
-    signal.signal(signal.SIGINT, sig_handler)
-    signal.signal(signal.SIGTERM, sig_handler)
-    while True:
-        try:
-            with serial.Serial(PORT, BAUDRATE, timeout=1) as ser:
-                rx_buf = ser.readline()
+    def sig_handler(self, signum, frame):  # pylint: disable=unused-argument
+        """graceful exit the loop"""
+        message = f'received {signum} - exiting'
+        log.info(message)
+        if self.socket:
+            self.socket.close()
+        raise SystemExit
+
+    def loop(self):
+        """run the loop using a with to connect to serial"""
+        signal.signal(signal.SIGINT, self.sig_handler)
+        signal.signal(signal.SIGTERM, self.sig_handler)
+
+        while True:
+            if self.socket:
+                rx_buf = self.socket.readline()
                 read(rx_buf)
-                ser.close()
-        except serial.SerialException as e:
-            log.error(f'error {e}')
-            raise SystemExit
-        except Exception as e:
-            log.error(f'error {e}')
-        time.sleep(0.1)
+            else:
+                self.socket = connect_to_serial(PORT, BAUDRATE)
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     # extracting time zone from the host machine
@@ -143,22 +159,22 @@ if __name__ == "__main__":
         headers = {}
         headers["Authorization"] = f'Bearer {SUPERVISOR_TOKEN}'
         headers["content-type"] = "text/plain"
-        url = "http://supervisor/core/api/config"
-        conf = requests.get(url, headers=headers)
-    except Exception as e:
-        log.error(e)
+        conf = requests.get(URL, headers=headers)
+    except requests.exceptions.RequestException as requests_error:
+        log.error(requests_error)
     else:
         if conf.status_code == 200:
-            supervisor_tz = conf.json()["time_zone"]
+            container_tz = conf.json()["time_zone"]
     finally:
         src = f'/usr/share/zoneinfo/{container_tz}'
-        dest = "/etc/localtime"
         try:
-            if os.path.exists(dest):
-                os.remove(dest)
-            os.link(src, dest)
-        except Exception as e:
-            log.error(e)
+            if os.path.exists(DEST):
+                os.remove(DEST)
+            os.link(src, DEST)
+        except Exception as error:
+            log.error(error)
         else:
-            log.info(f'timezone {container_tz} fixed')
-    loop()
+            info_message = f'timezone {container_tz} fixed'
+            log.info(info_message)
+    sniffer = Sniffer()
+    sniffer.loop()
