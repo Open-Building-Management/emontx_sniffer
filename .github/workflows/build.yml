@@ -10,7 +10,7 @@ jobs:
       matrix:
         include:
         - alpine_version: 3.18
-          tag: 3.18
+          tag: 3.18.1
     steps:
       -
         name: Checkout
