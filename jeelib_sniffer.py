@@ -63,6 +63,8 @@ def connect_to_serial(port, baudrate):
         error_message = f'error {err}'
         log.error(error_message)
         return None
+    success_message = f'connected to {port}@{baudrate}'
+    log.debug(success_message)
     return socket
 
 def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument

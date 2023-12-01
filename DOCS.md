@@ -1,10 +1,16 @@
 This tool reads radio data coming from emontx and send them to the emoncms
 
+You need a RFM69 radio receiver :
+
+- either one attached to the GPIO, like [emonPi](https://docs.openenergymonitor.org/emonpi/index.html) or [RFM69Pi](https://docs.openenergymonitor.org/emonbase/rfm69-pi.html) 
+
+- either a USB one, like the [jeelink-rfm69cw-to-usb-transceiver-433mhz](https://shop.openenergymonitor.com/jeelink-rfm69cw-to-usb-transceiver-433mhz/)
+
 # usage with a radio receiver attached to the GPIO
 
 ![emonbase](https://github.com/Open-Building-Management/emontx_sniffer/raw/main/images/emonbase.png)
 
-Devices like [emonPi](https://docs.openenergymonitor.org/emonpi/index.html) or [RFM69Pi](https://docs.openenergymonitor.org/emonbase/rfm69-pi.html) are usually recognized as `/dev/ttyAMA0`, the same port used by bluetooth on a raspberry
+Devices connected to the GPIO are usually recognized as `/dev/ttyAMA0`, the same port used by bluetooth on a raspberry
 
 Disabling bluetooth requires to modify `/boot/config.txt` and to add the following lines at the end :
 ```
@@ -18,10 +24,6 @@ If running an factory [SD card](https://www.home-assistant.io/installation/raspb
 It will require to establish an SSH access to the host through port 22222, as explained [here](https://developers.home-assistant.io/docs/operating-system/debugging/)
 
 Once connected with `ssh root@homeassistant.local -p 22222`, edit `/mnt/boot/config.txt`
-
-# usage with a USB dongle
-
-Not implemented yet
 
 # debugging the serial port
 
