@@ -21,5 +21,5 @@ schema:
   MQTT_PASSWORD: str
   MQTT_HOST: str?
   MQTT_PORT: int?
-  PORT: list(/dev/ttyAMA0|/dev/ttyUSB0)
+  PORT: list(/dev/ttyAMA0|/dev/ttyUSB0|/dev/ttyS0)
   VERBOSITY: bool
