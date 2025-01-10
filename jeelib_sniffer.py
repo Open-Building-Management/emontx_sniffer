@@ -47,7 +47,9 @@ MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
+MQTT_TOPIC = setting("MQTT_TOPIC", "emon")
 VERBOSITY = int(setting("VERBOSITY", True))
+RFM69_CONF = setting("RFM69_CONF","15i 200g")
 if VERBOSITY:
     log.setLevel("DEBUG")
 else:
@@ -63,13 +65,16 @@ def connect_to_serial(port, baudrate):
         error_message = f'error {err}'
         log.error(error_message)
         return None
+    socket.write(f'{RFM69_CONF}\n'.encode('utf-8'))
     success_message = f'connected to {port}@{baudrate}'
+    conf_message=f'Sent configuration:{RFM69_CONF}'
+    log.debug(conf_message)
     log.debug(success_message)
     return socket
-
-def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument
-    """detect the broker response to the connection request"""
+    
+def on_connect(client, userdata, flags, reason_code, properties):
     client.connection = True
+
 
 mqtt.Client.connection = False
 
@@ -77,7 +82,7 @@ def publish_to_mqtt(node, payload):
     """connect to mqtt broker and send payload"""
     message = {}
     message["success"] = True
-    mqttc = mqtt.Client()
+    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     mqttc.username_pw_set(MQTT_USER, password=MQTT_PASSWORD)
     mqttc.on_connect = on_connect
     try:
@@ -89,7 +94,7 @@ def publish_to_mqtt(node, payload):
         mqttc.loop_start()
         while not mqttc.connection :
             time.sleep(0.1)
-        result = mqttc.publish(f'emon/{node}', json.dumps(payload))
+        result = mqttc.publish(f'{MQTT_TOPIC}/{node}', json.dumps(payload))
         if result[0] != 0 :
             message["success"] = False
         mqttc.disconnect()
