@@ -1,9 +1,9 @@
 name: emontx_sniffer
 description:  read emontx 'jeelib' datas and send to emoncms
-version: alpine3.18.1
-image: alexjunk/emontx_sniffer
+version: alpine3.18.3
+image: rob570/emontx_sniffer
 slug: emontx_sniffer
-url: https://github.com/Open-Building-Management/emontx_sniffer/discussions
+url: https://https://github.com/rob570/emontx_sniffer/discussions
 init: true
 homeassistant_api: true
 uart: true
