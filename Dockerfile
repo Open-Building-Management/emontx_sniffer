@@ -2,7 +2,7 @@ ARG BUILD_FROM=alpine:3.16
 
 FROM $BUILD_FROM
 
-ENV TZ="Europe/Paris"
+ENV TZ="Europe/Rome"
 
 RUN apk update && apk upgrade;\
 	apk add --no-cache tzdata minicom nano python3 mosquitto-clients curl py3-pip;\
