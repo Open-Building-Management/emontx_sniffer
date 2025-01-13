@@ -48,6 +48,7 @@ MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 VERBOSITY = int(setting("VERBOSITY", True))
+RFM69_CONF = "15i 200g"
 if VERBOSITY:
     log.setLevel("DEBUG")
 else:
@@ -64,6 +65,8 @@ def connect_to_serial(port, baudrate):
         log.error(error_message)
         return None
     success_message = f'connected to {port}@{baudrate}'
+    serial.write(RFM69_CONF.encode('utf-8'))
+    print(f"Sent: {RFM69_CONF}")
     log.debug(success_message)
     return socket
 
