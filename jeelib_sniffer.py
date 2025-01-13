@@ -64,7 +64,7 @@ def connect_to_serial(port, baudrate):
         error_message = f'error {err}'
         log.error(error_message)
         return None
-    serial.write(RFM69_CONF.encode('utf-8'))
+    socket.write(RFM69_CONF.encode('utf-8'))
     success_message = f'connected to {port}@{baudrate}'
     conf_message=f'Sent configuration:{RFM69_CONF}'
     log.debug(conf_message)
