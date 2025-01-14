@@ -71,10 +71,10 @@ def connect_to_serial(port, baudrate):
     log.debug(conf_message)
     log.debug(success_message)
     return socket
-
-def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument
-    """detect the broker response to the connection request"""
+    
+def on_connect(client, userdata, flags, reason_code, properties):
     client.connection = True
+
 
 mqtt.Client.connection = False
 
