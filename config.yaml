@@ -1,6 +1,6 @@
 name: emontx_sniffer
 description:  read emontx 'jeelib' datas and send to emoncms
-version: alpine3.20.5
+version: alpine3.21.2
 image: rob570/emontx_sniffer
 slug: emontx_sniffer
 url: https://github.com/rob570/emontx_sniffer/discussions
