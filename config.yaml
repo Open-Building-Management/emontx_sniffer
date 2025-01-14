@@ -14,7 +14,7 @@ arch:
 options:
   MQTT_USER: emonpi
   MQTT_PASSWORD: emonpimqtt2016
-  MQTT_TOPIC: emon/{node}
+  MQTT_TOPIC: emon
   PORT: /dev/ttyS0
   RFM69_CONF: 15i 200g
   VERBOSITY: true
