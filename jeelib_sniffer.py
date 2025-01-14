@@ -94,7 +94,7 @@ def publish_to_mqtt(node, payload):
         mqttc.loop_start()
         while not mqttc.connection :
             time.sleep(0.1)
-        result = mqttc.publish(f'MQTT_TOPIC', json.dumps(payload))
+        result = mqttc.publish(f'{MQTT_TOPIC}', json.dumps(payload))
         if result[0] != 0 :
             message["success"] = False
         mqttc.disconnect()
