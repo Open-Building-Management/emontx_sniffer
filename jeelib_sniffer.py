@@ -47,7 +47,7 @@ MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
-MQTT_TOPIC = setting("MQTT_TOPIC", "emon/{node}")
+MQTT_TOPIC = setting("MQTT_TOPIC", "emon")
 VERBOSITY = int(setting("VERBOSITY", True))
 RFM69_CONF = setting("RFM69_CONF","15i 200g")
 if VERBOSITY:
@@ -94,7 +94,7 @@ def publish_to_mqtt(node, payload):
         mqttc.loop_start()
         while not mqttc.connection :
             time.sleep(0.1)
-        result = mqttc.publish(f'{MQTT_TOPIC}', json.dumps(payload))
+        result = mqttc.publish(f'{MQTT_TOPIC}/{node}', json.dumps(payload))
         if result[0] != 0 :
             message["success"] = False
         mqttc.disconnect()
