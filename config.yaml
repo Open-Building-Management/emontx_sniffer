@@ -14,11 +14,13 @@ arch:
 options:
   MQTT_USER: emonpi
   MQTT_PASSWORD: emonpimqtt2016
+  MQTT_TOPIC: emon/{node}
   PORT: /dev/ttyS0
   VERBOSITY: true
 schema:
   MQTT_USER: str
   MQTT_PASSWORD: str
+  MQTT_TOPIC: str?
   MQTT_HOST: str?
   MQTT_PORT: int?
   PORT: list(/dev/ttyAMA0|/dev/ttyUSB0|/dev/ttyS0)
