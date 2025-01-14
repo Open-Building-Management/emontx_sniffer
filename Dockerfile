@@ -7,7 +7,8 @@ ENV TZ="Europe/Rome"
 RUN apk update && apk upgrade;\
 	apk add --no-cache tzdata minicom nano python3 mosquitto-clients curl py3-pip pipx;\
 	python3 -m pip install --no-cache-dir pip --upgrade;\
-	pipx install  pyserial paho-mqtt requests
+	pipx install  pyserial paho-mqtt requests;\
+ 	pip3 install --no-cache-dir paho-mqtt
 
 COPY *.py .
 
