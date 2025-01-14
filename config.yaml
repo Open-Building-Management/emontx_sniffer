@@ -16,6 +16,7 @@ options:
   MQTT_PASSWORD: emonpimqtt2016
   MQTT_TOPIC: emon/{node}
   PORT: /dev/ttyS0
+  RFM69_CONF: 15i 200g
   VERBOSITY: true
 schema:
   MQTT_USER: str
@@ -23,5 +24,6 @@ schema:
   MQTT_TOPIC: str?
   MQTT_HOST: str?
   MQTT_PORT: int?
+  RFM69_CONF: str?
   PORT: list(/dev/ttyAMA0|/dev/ttyUSB0|/dev/ttyS0)
   VERBOSITY: bool
