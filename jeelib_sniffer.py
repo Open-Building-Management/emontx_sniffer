@@ -82,7 +82,7 @@ def publish_to_mqtt(node, payload):
     """connect to mqtt broker and send payload"""
     message = {}
     message["success"] = True
-    mqttc = mqtt.Client()
+    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     mqttc.username_pw_set(MQTT_USER, password=MQTT_PASSWORD)
     mqttc.on_connect = on_connect
     try:
