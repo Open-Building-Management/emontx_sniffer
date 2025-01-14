@@ -12,4 +12,4 @@ RUN apk update && apk upgrade;\
         . /ve/bin/activate;\
  	/ve/bin/pip3 install --no-cache-dir paho-mqtt
 
-CMD ["/ve/bin/python3", "jeelib_sniffer.py"]
+CMD ["python3", "jeelib_sniffer.py"]
