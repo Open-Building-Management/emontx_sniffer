@@ -7,10 +7,10 @@ ENV TZ="Europe/Rome"
 RUN apk update && apk upgrade;\
 	apk add --no-cache tzdata minicom nano python3 mosquitto-clients curl py3-pip pipx;\
 	python3 -m pip install --no-cache-dir pip --upgrade;\
-	pipx install  pyserial pyserial-ports paho-mqtt requests;\
- 	cp jeelib_sniffer.py /ve;\
+#	pipx install  pyserial pyserial-ports paho-mqtt requests;\
  	python3 -m venv /ve;\
         . /ve/bin/activate;\
- 	pip3 install --no-cache-dir paho-mqtt
+#	python3 -m pip install --no-cache-dir pip --upgrade;\
+ 	pip3 install --no-cache-dir pyserial paho-mqtt requests
 COPY *.py .
 CMD ["python3", "jeelib_sniffer.py"]
