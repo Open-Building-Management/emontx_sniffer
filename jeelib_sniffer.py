@@ -47,9 +47,9 @@ MQTT_USER = setting("MQTT_USER", "emonpi")
 MQTT_PASSWORD = setting("MQTT_PASSWORD", "emonpimqtt2016")
 MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_REPO)}-emoncms')
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
-MQTT_TOPIC = setting("MQTT_TOPIC", "emon/{node}"))
+MQTT_TOPIC = setting("MQTT_TOPIC", "emon/{node}")
 VERBOSITY = int(setting("VERBOSITY", True))
-RFM69_CONF = "15i 200g\n"
+RFM69_CONF = setting("RFM69_CONF","15i 200g\n")
 if VERBOSITY:
     log.setLevel("DEBUG")
 else:
