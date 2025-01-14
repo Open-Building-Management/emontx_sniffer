@@ -14,4 +14,5 @@ RUN apk update && apk upgrade;\
  	pip3 install --no-cache-dir pyserial paho-mqtt requests
 COPY *.py .
 CMD . /ve/bin/activate && python3 jeelib_sniffer.py
+SHELL ["/bin/bash", "-c"]
 #CMD ["python3", "jeelib_sniffer.py"]
