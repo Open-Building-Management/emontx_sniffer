@@ -49,6 +49,7 @@ MQTT_HOST = setting("MQTT_HOST", f'{get_hash_from_repository(TARGET_ADDON_GIT_RE
 MQTT_PORT = int(setting("MQTT_PORT", "1883"))
 MQTT_TOPIC = setting("MQTT_TOPIC", "emon")
 VERBOSITY = int(setting("VERBOSITY", True))
+WRITE_TO_RFM69 = int(setting("WRITE_TO_RFM69", False))
 RFM69_CONF = setting("RFM69_CONF","15i 200g")
 if VERBOSITY:
     log.setLevel("DEBUG")
@@ -65,13 +66,14 @@ def connect_to_serial(port, baudrate):
         error_message = f'error {err}'
         log.error(error_message)
         return None
-    socket.write(f'{RFM69_CONF}\n'.encode('utf-8'))
     success_message = f'connected to {port}@{baudrate}'
-    conf_message=f'Sent configuration:{RFM69_CONF}'
-    log.debug(conf_message)
     log.debug(success_message)
+    if WRITE_TO_RFM69:
+        socket.write(f'{RFM69_CONF}\n'.encode('utf-8'))
+        conf_message=f'Sent configuration:{RFM69_CONF}'
+        log.debug(conf_message)
     return socket
-    
+
 def on_connect(client, userdata, flags, reason_code, properties):
     client.connection = True
 
