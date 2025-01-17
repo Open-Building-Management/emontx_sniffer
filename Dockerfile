@@ -14,7 +14,7 @@ RUN apk update && apk upgrade;\
 COPY *.py .
 
 ENV \
-  PATH="{$ENV_DIR}/bin:$PATH" \
+  PATH="${ENV_DIR}/bin:$PATH" \
   TZ="Europe/Paris"
 
 CMD ["python3", "jeelib_sniffer.py"]
