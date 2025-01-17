@@ -9,8 +9,8 @@ jobs:
     strategy:
       matrix:
         include:
-        - alpine_version: 3.18
-          tag: 3.18.1
+        - alpine_version: 3.21.2
+          tag: 3.21.2.1
     steps:
       -
         name: Checkout
